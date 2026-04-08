@@ -13,9 +13,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -fno-exceptions -fno-rtti")
 
-add_executable(benchmark.wasm src/benchmark.cpp)
+add_executable(benchmark_wasm src/benchmark.cpp)
 
-set_target_properties(benchmark.wasm PROPERTIES
+set_target_properties(benchmark_wasm PROPERTIES
     OUTPUT_NAME benchmark
     SUFFIX ".wasm"
 )
