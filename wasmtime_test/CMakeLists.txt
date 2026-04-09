@@ -9,7 +9,26 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build" FORCE)
 endif()
 
-set(WASMTIME_ROOT "$ENV{HOME}/.wasmtime/wasmtime-dev-aarch64-linux-c-api/" CACHE PATH "Wasmtime C API path")
+if(NOT DEFINED WASMTIME_ROOT)
+    if(DEFINED ENV{WASMTIME_ROOT})
+        set(WASMTIME_ROOT "$ENV{WASMTIME_ROOT}" CACHE PATH "Wasmtime C API path")
+        message(STATUS "Read WASMTIME_ROOT from environment variable: ${WASMTIME_ROOT}")
+    else()
+        message(FATAL_ERROR "Error: WASMTIME_ROOT not configured!\n")
+    endif()
+endif()
+
+if(NOT EXISTS "${WASMTIME_ROOT}")
+    message(FATAL_ERROR
+        "========================================\n"
+        "  Error: WASMTIME_ROOT does not exist!\n"
+        "========================================\n"
+        "  Current path: ${WASMTIME_ROOT}\n"
+        "========================================\n"
+    )
+endif()
+
+message(STATUS "WASMTIME_ROOT = ${WASMTIME_ROOT}")
 
 find_path(WASMTIME_INCLUDE_DIR
     NAMES wasmtime.h
