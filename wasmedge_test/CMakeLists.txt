@@ -10,7 +10,25 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(WASMEDGE_ROOT "$ENV{HOME}/.wasmedge" CACHE PATH "WasmEdge installation root directory")
+if(NOT DEFINED WASMEDGE_ROOT)
+    if(DEFINED ENV{WASMEDGE_ROOT})
+        set(WASMEDGE_ROOT "$ENV{WASMEDGE_ROOT}" CACHE PATH "WasmEdge installation root directory")
+        message(STATUS "Read WASMEDGE_ROOT from environment variable: ${WASMEDGE_ROOT}")
+    else()
+        message(FATAL_ERROR "Error: WASMEDGE_ROOT not configured!\n")
+    endif()
+endif()
+
+if(NOT EXISTS "${WASMEDGE_ROOT}")
+    message(FATAL_ERROR
+        "========================================\n"
+        "  Error: WASMEDGE_ROOT does not exist!\n"
+        "========================================\n"
+        "  Current path: ${WASMEDGE_ROOT}\n"
+        "========================================\n")
+endif()
+
+message(STATUS "WASMEDGE_ROOT = ${WASMEDGE_ROOT}")
 
 find_path(WASMEDGE_INCLUDE_DIR
   NAMES wasmedge/wasmedge.h
