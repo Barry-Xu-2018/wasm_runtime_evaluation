@@ -9,7 +9,25 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build" FORCE)
 endif()
 
-set(WAMR_ROOT "$ENV{HOME}/.wamr" CACHE PATH "WAMR root directory (for installed WAMR)")
+if(NOT DEFINED WAMR_ROOT)
+    if(DEFINED ENV{WAMR_ROOT})
+        set(WAMR_ROOT "$ENV{WAMR_ROOT}" CACHE PATH "WAMR installation root directory")
+        message(STATUS "Read WAMR_ROOT from environment variable: ${WAMR_ROOT}")
+    else()
+        message(FATAL_ERROR "Error: WAMR_ROOT not configured!\n")
+    endif()
+endif()
+
+if(NOT EXISTS "${WAMR_ROOT}")
+    message(FATAL_ERROR
+        "========================================\n"
+        "  Error: WAMR_ROOT does not exist!\n"
+        "========================================\n"
+        "  Current path: ${WAMR_ROOT}\n"
+        "========================================\n")
+endif()
+
+message(STATUS "WAMR_ROOT = ${WAMR_ROOT}")
 
 find_path(WAMR_INCLUDE_DIR
   NAMES wasm_c_api.h
