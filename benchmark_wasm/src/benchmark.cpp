@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <ctime>
 #include <vector>
+#include <unistd.h>
 
 // ============================================================
 // Base64 Encoding table
@@ -136,7 +137,7 @@ int main()
 {
     // ---------- Configuration ----------
     static const size_t DATA_SIZE  = 16 * 1024;   // 16 KB
-    static const int    ITERATIONS = 100;          // Number of iterations
+    static const int    ITERATIONS = 100;         // Number of iterations
 
     // ---------- Buffer Preparation ----------
     const size_t enc_buf_size = ((DATA_SIZE + 2) / 3) * 4 + 4;
@@ -205,6 +206,10 @@ int main()
     printf("  Decode avg       : %.4f ms\n",             decode_avg_ms);
     printf("  Decode throughput: %.2f MB/s\n",           decode_throughput);
     printf("================================================\n\n");
+
+    printf("Wait for 30 seconds to allow the tester to obtain information about physical"
+        " memory usage.\n");
+    sleep(30);
 
     return correct ? 0 : 1;
 }
