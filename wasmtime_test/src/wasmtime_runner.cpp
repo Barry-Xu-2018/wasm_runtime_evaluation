@@ -226,7 +226,7 @@ int main(int argc, char* argv[])
         }
     } else if (trap) {
         fprintf(stderr, "[ERROR] Runtime error occurred\n");
-        print_error(error, nullptr);
+        print_error(nullptr, trap);
         exit_code = 1;
     } else {
         fprintf(stdout, "[INFO] _start() returned normally\n");
