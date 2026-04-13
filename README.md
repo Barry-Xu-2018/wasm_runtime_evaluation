@@ -52,6 +52,13 @@ The reason for using Ubuntu 22.04 is that the WAMR manual specifies using Ubuntu
     -DCMAKE_BUILD_TYPE=Release
    $ cmake --build . -j 2
    $ cmake --install . --prefix ${HOME}/.wamr
+
+   # 5. build wamrc
+   $ cd wamr-compiler
+   $ ./build_llvm.sh
+   $ mkdir build && cd build
+   $ cmake ..
+   $ cmake --build . -j 2
    ```
 
 ## Install wasi-sdk
