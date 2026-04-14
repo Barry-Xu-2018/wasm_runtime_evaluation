@@ -42,17 +42,16 @@ if(NOT WASMEDGE_INCLUDE_DIR OR NOT WASMEDGE_LIBRARY)
   message(FATAL_ERROR "WasmEdge not found!\n")
 endif()
 
-add_executable(wasmedge_runner src/wasmedge_runner.cpp)
+function(add_wasmedge_executable TARGET_NAME SOURCE_FILE)
+    add_executable(${TARGET_NAME} ${SOURCE_FILE})
+    target_include_directories(${TARGET_NAME} PRIVATE ${WASMEDGE_INCLUDE_DIR})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${WASMEDGE_LIBRARY})
+    target_compile_options(
+      ${TARGET_NAME} PRIVATE
+      -Wall
+      -Wextra)
+endfunction()
 
-target_include_directories(
-  wasmedge_runner PRIVATE
-  ${WASMEDGE_INCLUDE_DIR})
+add_wasmedge_executable(wasmedge_runner src/wasmedge_runner.cpp)
+add_wasmedge_executable(wasmedge_aot_runner src/wasmedge_aot_runner.cpp)
 
-target_link_libraries(
-  wasmedge_runner PRIVATE
-  ${WASMEDGE_LIBRARY})
-
-target_compile_options(
-  wasmedge_runner PRIVATE
-  -Wall
-  -Wextra)
