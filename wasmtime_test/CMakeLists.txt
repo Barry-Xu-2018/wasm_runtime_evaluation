@@ -46,13 +46,17 @@ if(NOT WASMTIME_INCLUDE_DIR OR NOT WASMTIME_LIBRARY)
         " where wasmtime.h and libwasmtime.so are located.")
 endif()
 
-add_executable(wasmtime_runner src/wasmtime_runner.cpp)
-set_target_properties(wasmtime_runner PROPERTIES
-    OUTPUT_NAME wasmtime_runner
-    CXX_VISIBILITY_PRESET hidden
-    POSITION_INDEPENDENT_CODE ON)
+function(add_wasmtime_executable TARGET_NAME SOURCE_FILE)
+    add_executable(${TARGET_NAME} ${SOURCE_FILE})
+    set_target_properties(${TARGET_NAME} PROPERTIES
+        OUTPUT_NAME             ${TARGET_NAME}
+        CXX_VISIBILITY_PRESET   hidden
+        POSITION_INDEPENDENT_CODE ON)
+    target_include_directories(${TARGET_NAME} PRIVATE ${WASMTIME_INCLUDE_DIR})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${WASMTIME_LIBRARY})
+    target_compile_options(${TARGET_NAME} PRIVATE
+        -Wall -Wextra -Wno-deprecated-declarations)
+endfunction()
 
-target_include_directories(wasmtime_runner PRIVATE ${WASMTIME_INCLUDE_DIR})
-target_link_libraries(wasmtime_runner PRIVATE ${WASMTIME_LIBRARY})
-
-target_compile_options(wasmtime_runner PRIVATE -Wall -Wextra -Wno-deprecated-declarations)
+add_wasmtime_executable(wasmtime_runner     src/wasmtime_runner.cpp)
+add_wasmtime_executable(wasmtime_aot_runner src/wasmtime_aot_runner.cpp)
