@@ -11,7 +11,7 @@ The reason for using Ubuntu 22.04 is that the WAMR manual specifies using Ubuntu
    ```bash
    $ curl https://wasmtime.dev/install.sh -sSf | bash
    ```
-   C API sdk is https://github.com/bytecodealliance/wasmtime/releases/download/v43.0.0/wasmtime-v43.0.0-aarch64-linux-c-api.tar.xz.  
+   C API sdk is https://github.com/bytecodealliance/wasmtime/releases/download/v43.0.1/wasmtime-v43.0.1-aarch64-linux-c-api.tar.xz.  
    Download it and copy min/include and min/lib to ${HOME}/.wasmtime
 
 2. **wasmedge**
@@ -82,7 +82,7 @@ You will find the file `benchmark.wasm`.
 ```bash
 $ cd wasm_runtime_evaluation/wasmtime_test
 $ mkdir build && cd build
-$ cmake .. -DWASMTIME_ROOT=${HOME}/.wasmtime/wasmtime-dev-aarch64-linux-c-api
+$ cmake .. -DWASMTIME_ROOT=${HOME}/.wasmtime/wasmtime-v43.0.1-aarch64-android-c-api
 $ cmake --build .
 $ ./wasmtime_runner ../../benchmark_wasm/build/benchmark.wasm
 ```
