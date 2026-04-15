@@ -31,19 +31,6 @@ static void print_error(wasmtime_error_t* error, wasm_trap_t* trap)
   wasm_byte_vec_delete(&msg);
 }
 
-static bool is_aot_file(const std::string& filename)
-{
-  if (filename.size() >= 6) {
-    const std::string ext = filename.substr(filename.size() - 6); // ".cwasm"
-    if (ext == ".cwasm") {
-        fprintf(stdout, "[INFO] Detected AOT file by extension (.cwasm)\n");
-        return true;
-    }
-  }
-
-  return false;
-}
-
 // ============================================================
 // main
 // ============================================================
@@ -60,16 +47,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "[INFO] Wasmtime version: %s\n", WASMTIME_VERSION);
 
     // ----------------------------------------------------------
-    // 1. Check if it's an AOT file based on extension
-    // ----------------------------------------------------------
-    if (!is_aot_file(WASM_FILE)) {
-        fprintf(stderr, "[ERROR] Input file does not have .cwasm extension,"
-          " expected AOT precompiled module\n");
-        return 1;
-    }
-
-    // ----------------------------------------------------------
-    // 2. Create Engine
+    // 1. Create Engine
     // ----------------------------------------------------------
     auto start_time = std::chrono::high_resolution_clock::now();
     wasm_engine_t* engine = wasm_engine_new();
@@ -84,13 +62,13 @@ int main(int argc, char* argv[])
     fprintf(stdout, "[INFO] Engine created successfully in %ld µs\n", duration);
 
     // ----------------------------------------------------------
-    // 3. Create Store
+    // 2. Create Store
     // ----------------------------------------------------------
     wasmtime_store_t*   store   = wasmtime_store_new(engine, nullptr, nullptr);
     wasmtime_context_t* context = wasmtime_store_context(store);
 
     // ----------------------------------------------------------
-    // 4. Configure WASI
+    // 3. Configure WASI
     //    - Inherit host's stdout / stderr / stdin
     // ----------------------------------------------------------
     wasi_config_t* wasi_cfg = wasi_config_new();
@@ -110,7 +88,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "[INFO] WASI environment configured successfully\n");
 
     // ----------------------------------------------------------
-    // 5. Load module — AOT Wasm
+    // 4. Load module — AOT Wasm
     // ----------------------------------------------------------
     wasmtime_module_t* module = nullptr;
     start_time = std::chrono::high_resolution_clock::now();
@@ -133,7 +111,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "[INFO] Module loaded successfully in %ld µs (AOT)\n", duration);
 
     // ----------------------------------------------------------
-    // 6. Create Linker and register WASI
+    // 5. Create Linker and register WASI
     // ----------------------------------------------------------
     wasmtime_linker_t* linker = wasmtime_linker_new(engine);
 
@@ -150,7 +128,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "[INFO] WASI registered to Linker successfully\n");
 
     // ----------------------------------------------------------
-    // 7. Instantiate module
+    // 6. Instantiate module
     // ----------------------------------------------------------
     wasmtime_instance_t instance;
     wasm_trap_t*        trap = nullptr;
@@ -173,7 +151,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "[INFO] Module instantiated successfully in %ld µs\n", duration);
 
     // ----------------------------------------------------------
-    // 8. Get and call _start (WASI entry point)
+    // 7. Get and call _start (WASI entry point)
     // ----------------------------------------------------------
     wasmtime_extern_t start_extern;
     bool found = wasmtime_instance_export_get(
@@ -202,7 +180,7 @@ int main(int argc, char* argv[])
     fprintf(stdout, "\n================================================\n");
 
     // ----------------------------------------------------------
-    // 9. Handle execution result
+    // 8. Handle execution result
     // ----------------------------------------------------------
     int exit_code = 0;
 
@@ -227,7 +205,7 @@ int main(int argc, char* argv[])
     }
 
     // ----------------------------------------------------------
-    // 10. Clean up resources
+    // 9. Clean up resources
     // ----------------------------------------------------------
     wasmtime_linker_delete(linker);
     wasmtime_module_delete(module);
