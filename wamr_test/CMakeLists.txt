@@ -42,14 +42,15 @@ if(NOT WAMR_INCLUDE_DIR OR NOT WAMR_LIBRARY)
     "WAMR not found. Please set WAMR_ROOT to the installation directory of WAMR.")
 endif()
 
-add_executable(wamr_runner src/wamr_runner.cpp)
+function(add_wamr_executable TARGET_NAME SOURCE_FILE)
+    add_executable(${TARGET_NAME} ${SOURCE_FILE})
+    target_include_directories(${TARGET_NAME} PRIVATE ${WAMR_INCLUDE_DIR})
+    target_link_libraries(${TARGET_NAME} PRIVATE ${WAMR_LIBRARY})
+    target_compile_options(
+      ${TARGET_NAME} PRIVATE
+      -Wall -Wextra)
+endfunction()
 
-target_include_directories(
-  wamr_runner PRIVATE
-  ${WAMR_INCLUDE_DIR}
-)
-target_link_libraries(
-  wamr_runner PRIVATE
-  ${WAMR_LIBRARY})
+add_wamr_executable(wamr_runner src/wamr_runner.cpp)
+add_wamr_executable(wamr_aot_runner src/wamr_aot_runner.cpp)
 
-target_compile_options(wamr_runner PRIVATE -Wall -Wextra)
