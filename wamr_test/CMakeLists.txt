@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
-project(wamr_runner CXX)
+project(wamr_runner C CXX)
 
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -42,10 +43,13 @@ if(NOT WAMR_INCLUDE_DIR OR NOT WAMR_LIBRARY)
     "WAMR not found. Please set WAMR_ROOT to the installation directory of WAMR.")
 endif()
 
+list(APPEND CMAKE_PREFIX_PATH "${WAMR_ROOT}/")
+find_package(iwasm REQUIRED)
+
 function(add_wamr_executable TARGET_NAME SOURCE_FILE)
     add_executable(${TARGET_NAME} ${SOURCE_FILE})
     target_include_directories(${TARGET_NAME} PRIVATE ${WAMR_INCLUDE_DIR})
-    target_link_libraries(${TARGET_NAME} PRIVATE ${WAMR_LIBRARY})
+    target_link_libraries(${TARGET_NAME} PRIVATE iwasm::vmlib)
     target_compile_options(
       ${TARGET_NAME} PRIVATE
       -Wall -Wextra)
@@ -53,4 +57,4 @@ endfunction()
 
 add_wamr_executable(wamr_runner src/wamr_runner.cpp)
 add_wamr_executable(wamr_aot_runner src/wamr_aot_runner.cpp)
-
+add_wamr_executable(wamr_aot_runner_c src/wamr_aot_runner.c)

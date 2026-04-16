@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(wasmedge_runner CXX)
+project(wasmedge_runner C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -54,4 +54,4 @@ endfunction()
 
 add_wasmedge_executable(wasmedge_runner src/wasmedge_runner.cpp)
 add_wasmedge_executable(wasmedge_aot_runner src/wasmedge_aot_runner.cpp)
-
+add_wasmedge_executable(wasmedge_aot_runner_c src/wasmedge_aot_runner.c)

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(wasmtime_runner CXX)
+project(wasmtime_runner C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -60,3 +60,4 @@ endfunction()
 
 add_wasmtime_executable(wasmtime_runner     src/wasmtime_runner.cpp)
 add_wasmtime_executable(wasmtime_aot_runner src/wasmtime_aot_runner.cpp)
+add_wasmtime_executable(wasmtime_aot_runner_c src/wasmtime_aot_runner.c)
