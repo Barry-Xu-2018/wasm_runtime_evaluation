@@ -50,9 +50,7 @@ The reason for using Ubuntu 22.04 is that the WAMR manual specifies using Ubuntu
     -DWAMR_BUILD_INTERP=1 \
     -DWAMR_BUILD_LIBC_WASI=1 \
     -DWAMR_BUILD_LIBC_BUILTIN=1 \
-    -DWAMR_BUILD_JIT=1 \
     -DWAMR_BUILD_AOT=1 \
-    -DBUILD_SHARED_LIBS=1
    $ cmake --build . -j 2
    $ cmake --install . --prefix ${HOME}/.wamr
    ```
@@ -115,4 +113,6 @@ $ ./wamr_runner ../../benchmark_wasm/build/benchmark.wasm
 # Product AOT wasm file
 $ export PATH=${HOME}/.wamr/bin:${PATH}
 $ wamrc -o benchmark.aot ../../benchmark_wasm/build/benchmark.wasm
+# Run AOT wasm file
+$ ./wamr_aot_runner benchmark.aot
 ```
