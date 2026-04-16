@@ -10,7 +10,7 @@
 #include "wasm_export.h"
 
 // ============================================================
-// Read wasm/aot file into a byte buffer
+// Read aot wasm file into a byte buffer
 // ============================================================
 static std::vector<uint8_t> read_wasm_file(const std::string& filename)
 {
@@ -41,10 +41,11 @@ int main(int argc, char* argv[])
 {
   // Parse command-line arguments
   if (argc < 2) {
-      fprintf(stderr, "[ERROR] Usage: %s <wasm_or_aot_file>\n", argv[0]);
+      fprintf(stderr, "[ERROR] Usage: %s <aot_wasm_file>\n", argv[0]);
       return 1;
   }
   const char* WASM_FILE = argv[1];
+  static char global_heap_buf[256 * 1024];
 
   // Print WAMR version banner
   uint32_t major, minor, patch;
@@ -75,6 +76,9 @@ int main(int argc, char* argv[])
   memset(&init_args, 0, sizeof(init_args));
 
   init_args.running_mode = Mode_Interp;
+  init_args.mem_alloc_type = Alloc_With_Pool;
+  init_args.mem_alloc_option.pool.heap_buf = global_heap_buf;
+  init_args.mem_alloc_option.pool.heap_size = sizeof(global_heap_buf);
   fprintf(stdout, "[INFO] Running mode: AOT (native pre-compiled)\n");
 
   // Use the system allocator for simplicity
