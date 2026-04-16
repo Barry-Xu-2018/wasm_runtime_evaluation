@@ -85,6 +85,7 @@ $ export PATH=${HOME}/.wasmtime/bin:$PATH
 $ wasmtime compile -W concurrency-support=n -o benchmark.cwasm ../../benchmark_wasm/build/benchmark.wasm
 # Run AOT wasm file
 $ ./wasmtime_aot_runner benchmark.cwasm
+$ ./wasmtime_aot_runner_c benchmark.cwasm
 ```
 
 ### wasmedge runner
@@ -100,6 +101,7 @@ $ source ${HOME}/.wasmedge/env
 $ wasmedge compile ../../benchmark_wasm/build/benchmark.wasm benchmark.so
 # Run AOT wasm file
 $ ./wasmedge_aot_runner benchmark.so
+$ ./wasmedge_aot_runner_c benchmark.so
 ```
 
 ### wamr runner
@@ -115,4 +117,5 @@ $ export PATH=${HOME}/.wamr/bin:${PATH}
 $ wamrc -o benchmark.aot ../../benchmark_wasm/build/benchmark.wasm
 # Run AOT wasm file
 $ ./wamr_aot_runner benchmark.aot
+$ ./wamr_aot_runner_c benchmark.aot
 ```
